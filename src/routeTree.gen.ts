@@ -9,38 +9,212 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CategoriesRouteImport } from './routes/categories'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProspectsIndexRouteImport } from './routes/prospects.index'
+import { Route as DevisIndexRouteImport } from './routes/devis.index'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as ProduitProductIdRouteImport } from './routes/produit.$productId'
+import { Route as CatalogueCategoryIdRouteImport } from './routes/catalogue.$categoryId'
+import { Route as AdminStatsRouteImport } from './routes/admin.stats'
+import { Route as AdminProduitsRouteImport } from './routes/admin.produits'
+import { Route as AdminFournisseursRouteImport } from './routes/admin.fournisseurs'
+import { Route as AdminDevisRouteImport } from './routes/admin.devis'
 
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategoriesRoute = CategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProspectsIndexRoute = ProspectsIndexRouteImport.update({
+  id: '/prospects/',
+  path: '/prospects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevisIndexRoute = DevisIndexRouteImport.update({
+  id: '/devis/',
+  path: '/devis/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/app/',
+  path: '/app/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProduitProductIdRoute = ProduitProductIdRouteImport.update({
+  id: '/produit/$productId',
+  path: '/produit/$productId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CatalogueCategoryIdRoute = CatalogueCategoryIdRouteImport.update({
+  id: '/catalogue/$categoryId',
+  path: '/catalogue/$categoryId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminStatsRoute = AdminStatsRouteImport.update({
+  id: '/admin/stats',
+  path: '/admin/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminProduitsRoute = AdminProduitsRouteImport.update({
+  id: '/admin/produits',
+  path: '/admin/produits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminFournisseursRoute = AdminFournisseursRouteImport.update({
+  id: '/admin/fournisseurs',
+  path: '/admin/fournisseurs',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminDevisRoute = AdminDevisRouteImport.update({
+  id: '/admin/devis',
+  path: '/admin/devis',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/categories': typeof CategoriesRoute
+  '/contact': typeof ContactRoute
+  '/admin/devis': typeof AdminDevisRoute
+  '/admin/fournisseurs': typeof AdminFournisseursRoute
+  '/admin/produits': typeof AdminProduitsRoute
+  '/admin/stats': typeof AdminStatsRoute
+  '/catalogue/$categoryId': typeof CatalogueCategoryIdRoute
+  '/produit/$productId': typeof ProduitProductIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/devis/': typeof DevisIndexRoute
+  '/prospects/': typeof ProspectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/categories': typeof CategoriesRoute
+  '/contact': typeof ContactRoute
+  '/admin/devis': typeof AdminDevisRoute
+  '/admin/fournisseurs': typeof AdminFournisseursRoute
+  '/admin/produits': typeof AdminProduitsRoute
+  '/admin/stats': typeof AdminStatsRoute
+  '/catalogue/$categoryId': typeof CatalogueCategoryIdRoute
+  '/produit/$productId': typeof ProduitProductIdRoute
+  '/admin': typeof AdminIndexRoute
+  '/app': typeof AppIndexRoute
+  '/devis': typeof DevisIndexRoute
+  '/prospects': typeof ProspectsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/categories': typeof CategoriesRoute
+  '/contact': typeof ContactRoute
+  '/admin/devis': typeof AdminDevisRoute
+  '/admin/fournisseurs': typeof AdminFournisseursRoute
+  '/admin/produits': typeof AdminProduitsRoute
+  '/admin/stats': typeof AdminStatsRoute
+  '/catalogue/$categoryId': typeof CatalogueCategoryIdRoute
+  '/produit/$productId': typeof ProduitProductIdRoute
+  '/admin/': typeof AdminIndexRoute
+  '/app/': typeof AppIndexRoute
+  '/devis/': typeof DevisIndexRoute
+  '/prospects/': typeof ProspectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/categories'
+    | '/contact'
+    | '/admin/devis'
+    | '/admin/fournisseurs'
+    | '/admin/produits'
+    | '/admin/stats'
+    | '/catalogue/$categoryId'
+    | '/produit/$productId'
+    | '/admin/'
+    | '/app/'
+    | '/devis/'
+    | '/prospects/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/categories'
+    | '/contact'
+    | '/admin/devis'
+    | '/admin/fournisseurs'
+    | '/admin/produits'
+    | '/admin/stats'
+    | '/catalogue/$categoryId'
+    | '/produit/$productId'
+    | '/admin'
+    | '/app'
+    | '/devis'
+    | '/prospects'
+  id:
+    | '__root__'
+    | '/'
+    | '/categories'
+    | '/contact'
+    | '/admin/devis'
+    | '/admin/fournisseurs'
+    | '/admin/produits'
+    | '/admin/stats'
+    | '/catalogue/$categoryId'
+    | '/produit/$productId'
+    | '/admin/'
+    | '/app/'
+    | '/devis/'
+    | '/prospects/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CategoriesRoute: typeof CategoriesRoute
+  ContactRoute: typeof ContactRoute
+  AdminDevisRoute: typeof AdminDevisRoute
+  AdminFournisseursRoute: typeof AdminFournisseursRoute
+  AdminProduitsRoute: typeof AdminProduitsRoute
+  AdminStatsRoute: typeof AdminStatsRoute
+  CatalogueCategoryIdRoute: typeof CatalogueCategoryIdRoute
+  ProduitProductIdRoute: typeof ProduitProductIdRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AppIndexRoute: typeof AppIndexRoute
+  DevisIndexRoute: typeof DevisIndexRoute
+  ProspectsIndexRoute: typeof ProspectsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/categories': {
+      id: '/categories'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof CategoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +222,93 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/prospects/': {
+      id: '/prospects/'
+      path: '/prospects'
+      fullPath: '/prospects/'
+      preLoaderRoute: typeof ProspectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/devis/': {
+      id: '/devis/'
+      path: '/devis'
+      fullPath: '/devis/'
+      preLoaderRoute: typeof DevisIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/app'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/produit/$productId': {
+      id: '/produit/$productId'
+      path: '/produit/$productId'
+      fullPath: '/produit/$productId'
+      preLoaderRoute: typeof ProduitProductIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catalogue/$categoryId': {
+      id: '/catalogue/$categoryId'
+      path: '/catalogue/$categoryId'
+      fullPath: '/catalogue/$categoryId'
+      preLoaderRoute: typeof CatalogueCategoryIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/stats': {
+      id: '/admin/stats'
+      path: '/admin/stats'
+      fullPath: '/admin/stats'
+      preLoaderRoute: typeof AdminStatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/produits': {
+      id: '/admin/produits'
+      path: '/admin/produits'
+      fullPath: '/admin/produits'
+      preLoaderRoute: typeof AdminProduitsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/fournisseurs': {
+      id: '/admin/fournisseurs'
+      path: '/admin/fournisseurs'
+      fullPath: '/admin/fournisseurs'
+      preLoaderRoute: typeof AdminFournisseursRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/devis': {
+      id: '/admin/devis'
+      path: '/admin/devis'
+      fullPath: '/admin/devis'
+      preLoaderRoute: typeof AdminDevisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CategoriesRoute: CategoriesRoute,
+  ContactRoute: ContactRoute,
+  AdminDevisRoute: AdminDevisRoute,
+  AdminFournisseursRoute: AdminFournisseursRoute,
+  AdminProduitsRoute: AdminProduitsRoute,
+  AdminStatsRoute: AdminStatsRoute,
+  CatalogueCategoryIdRoute: CatalogueCategoryIdRoute,
+  ProduitProductIdRoute: ProduitProductIdRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AppIndexRoute: AppIndexRoute,
+  DevisIndexRoute: DevisIndexRoute,
+  ProspectsIndexRoute: ProspectsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
