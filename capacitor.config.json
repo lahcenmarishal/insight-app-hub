@@ -1,0 +1,9 @@
+{
+  "appId": "app.lovable.7a03cf6ca96f454a9d0888e598c8f872",
+  "appName": "Innova Lab Solutions",
+  "webDir": "dist",
+  "server": {
+    "url": "https://7a03cf6c-a96f-454a-9d08-88e598c8f872.lovableproject.com?forceHideBadge=true",
+    "cleartext": true
+  }
+}
