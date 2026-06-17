@@ -1,51 +1,51 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useParams, useSearchParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { PublicShell } from "@/components/public-shell";
 import { fetchCatalog } from "@/lib/catalog.functions";
+import { useDocumentMeta } from "@/lib/seo";
 import { ChevronRight, X } from "lucide-react";
 import { AddToQuoteButton } from "@/components/add-to-quote-button";
 import { openProductSheet } from "@/components/product-sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
-
-interface CatSearch { sub?: string }
+import { NotFound } from "@/components/not-found";
 
 export const Route = createFileRoute("/catalogue/$categoryId")({
-  validateSearch: (s: Record<string, unknown>): CatSearch => ({
-    sub: typeof s.sub === "string" ? s.sub : undefined,
-  }),
-  loader: async ({ params }) => {
-    const { categories, products } = await fetchCatalog();
-    const cat = categories.find((c) => c.id === params.categoryId);
-    if (!cat) throw notFound();
-    return {
-      category: cat,
-      products: products.filter((p) => p.categoryId === params.categoryId && !p.archived),
-    };
-  },
-  head: ({ loaderData }) => {
-    const cat = loaderData?.category;
-    return {
-      meta: [
-        { title: cat ? `${cat.name} — Innova Lab Solutions` : "Catégorie" },
-        { name: "description", content: cat?.description ?? "Catégorie produits" },
-      ],
-    };
-  },
   component: CategoryPage,
-  notFoundComponent: () => (
-    <PublicShell>
-      <div className="text-center py-20">
-        <h1 className="font-display text-2xl font-bold mb-2">Catégorie introuvable</h1>
-        <Link to="/categories" className="text-accent hover:underline">Retour aux catégories</Link>
-      </div>
-    </PublicShell>
-  ),
 });
 
 function CategoryPage() {
-  const { category, products } = Route.useLoaderData();
-  const { sub } = Route.useSearch();
+  const { categoryId = "" } = useParams<{ categoryId: string }>();
+  const [searchParams] = useSearchParams();
+  const sub = searchParams.get("sub") || undefined;
   const isMobile = useIsMobile();
-  const filtered = sub ? products.filter((p: { subcategory?: string }) => p.subcategory === sub) : products;
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["catalog"],
+    queryFn: fetchCatalog,
+    staleTime: 30_000,
+  });
+
+  const category = data?.categories.find((c) => c.id === categoryId) ?? null;
+  const products = (data?.products ?? []).filter(
+    (p) => p.categoryId === categoryId && !p.archived,
+  );
+
+  useDocumentMeta({
+    title: category ? `${category.name} — Innova Lab Solutions` : "Catégorie — Innova Lab",
+    description: category?.description ?? "Catégorie produits",
+  });
+
+  if (!isLoading && !category) return <NotFound />;
+  if (!category) {
+    return (
+      <PublicShell>
+        <div className="text-center py-20 text-muted-foreground">Chargement…</div>
+      </PublicShell>
+    );
+  }
+
+  const filtered = sub ? products.filter((p) => p.subcategory === sub) : products;
 
   return (
     <PublicShell>
@@ -53,10 +53,12 @@ function CategoryPage() {
         <Link to="/categories" className="hover:text-foreground">Catégories</Link>
         <ChevronRight className="h-3.5 w-3.5" />
         <span className="text-foreground font-medium">{category.name}</span>
-        {sub && <>
-          <ChevronRight className="h-3.5 w-3.5" />
-          <span className="text-foreground font-medium">{sub}</span>
-        </>}
+        {sub && (
+          <>
+            <ChevronRight className="h-3.5 w-3.5" />
+            <span className="text-foreground font-medium">{sub}</span>
+          </>
+        )}
       </nav>
 
       <div className="mb-6">
@@ -69,12 +71,11 @@ function CategoryPage() {
           <Link
             to="/catalogue/$categoryId"
             params={{ categoryId: category.id }}
-            search={{ sub: undefined }}
             className={"text-xs font-medium px-3 py-1.5 rounded-full border transition " + (!sub ? "bg-primary text-primary-foreground border-primary" : "bg-card hover:border-accent")}
           >
             Toutes
           </Link>
-          {category.subcategories.map((s: string) => (
+          {category.subcategories.map((s) => (
             <Link
               key={s}
               to="/catalogue/$categoryId"
@@ -89,7 +90,6 @@ function CategoryPage() {
             <Link
               to="/catalogue/$categoryId"
               params={{ categoryId: category.id }}
-              search={{ sub: undefined }}
               className="text-xs inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full text-muted-foreground hover:text-destructive"
             >
               <X className="h-3 w-3" /> Réinitialiser
@@ -99,7 +99,7 @@ function CategoryPage() {
       )}
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-        {filtered.map((p: { id: string; name: string; reference: string; brand: string; image: string; salePrice?: number }) => (
+        {filtered.map((p) => (
           <div
             key={p.id}
             className="group rounded-xl bg-card border overflow-hidden hover:border-accent hover:shadow-[var(--shadow-md)] transition-all flex flex-col"

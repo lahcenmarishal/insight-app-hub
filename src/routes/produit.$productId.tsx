@@ -1,66 +1,59 @@
-import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { PublicShell } from "@/components/public-shell";
 import { useQuoteCart } from "@/lib/quote-store";
 import { fetchCatalog } from "@/lib/catalog.functions";
+import { useDocumentMeta } from "@/lib/seo";
 import {
   ChevronRight, Plus, Minus, ShoppingCart, FileDown,
   Check, Package, Tag, Building2, ArrowRight, FileText, Layers,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { NotFound } from "@/components/not-found";
 
 export const Route = createFileRoute("/produit/$productId")({
-  loader: async ({ params }) => {
-    const { categories, products } = await fetchCatalog();
-    const product = products.find((p) => p.id === params.productId);
-    if (!product || product.archived) throw notFound();
-    const category = categories.find((c) => c.id === product.categoryId) ?? null;
-    const similar = products
-      .filter((p) => p.categoryId === product.categoryId && p.id !== product.id && !p.archived)
-      .slice(0, 4);
-    return { product, category, similar };
-  },
-  head: ({ loaderData }) => {
-    const p = loaderData?.product;
-    const keywords = p?.keywords?.length ? p.keywords.join(", ") : undefined;
-    return {
-      meta: [
-        { title: p ? `${p.name} — Innova Lab Solutions` : "Produit" },
-        { name: "description", content: p?.description ?? "Fiche produit" },
-        ...(keywords ? [{ name: "keywords", content: keywords }] : []),
-        { property: "og:title", content: p?.name ?? "Produit" },
-        { property: "og:description", content: p?.description ?? "" },
-        { property: "og:image", content: p?.image ?? "" },
-      ],
-    };
-  },
   component: ProductPage,
-  notFoundComponent: () => (
-    <PublicShell>
-      <div className="text-center py-20">
-        <h1 className="font-display text-2xl font-bold mb-2">Produit introuvable</h1>
-        <Link to="/" className="text-accent hover:underline">Retour au catalogue</Link>
-      </div>
-    </PublicShell>
-  ),
-  errorComponent: () => (
-    <PublicShell>
-      <div className="text-center py-20">
-        <h1 className="font-display text-2xl font-bold mb-2">Une erreur est survenue</h1>
-        <Link to="/" className="text-accent hover:underline">Retour au catalogue</Link>
-      </div>
-    </PublicShell>
-  ),
 });
 
 function ProductPage() {
-  const { product, category, similar } = Route.useLoaderData();
-  const { add } = useQuoteCart();
+  const { productId = "" } = useParams<{ productId: string }>();
   const navigate = useNavigate();
+  const { add } = useQuoteCart();
   const [qty, setQty] = useState(1);
-  const images = [product.image, ...(product.gallery ?? [])].filter(Boolean);
-  const [activeImage, setActiveImage] = useState(images[0] ?? product.image);
-  const hasDoc = Boolean(product.datasheetUrl);
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["catalog"],
+    queryFn: fetchCatalog,
+    staleTime: 30_000,
+  });
+
+  const product = data?.products.find((p) => p.id === productId) ?? null;
+  const category = product ? (data?.categories.find((c) => c.id === product.categoryId) ?? null) : null;
+  const similar = product
+    ? (data?.products ?? []).filter((p) => p.categoryId === product.categoryId && p.id !== product.id && !p.archived).slice(0, 4)
+    : [];
+
+  useDocumentMeta({
+    title: product ? `${product.name} — Innova Lab Solutions` : "Produit",
+    description: product?.description ?? "Fiche produit",
+    ogImage: product?.image,
+  });
+
+  const images = product ? [product.image, ...(product.gallery ?? [])].filter(Boolean) : [];
+  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const currentImage = activeImage ?? images[0] ?? product?.image ?? "";
+  const hasDoc = Boolean(product?.datasheetUrl);
+
+  if (!isLoading && (!product || product.archived)) return <NotFound />;
+  if (!product) {
+    return (
+      <PublicShell>
+        <div className="text-center py-20 text-muted-foreground">Chargement…</div>
+      </PublicShell>
+    );
+  }
 
   const addToQuote = (goToQuote = false) => {
     add({ productId: product.id, productName: product.name, reference: product.reference, quantity: qty });
@@ -70,7 +63,6 @@ function ProductPage() {
 
   return (
     <PublicShell>
-      {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-sm text-muted-foreground mb-6 flex-wrap">
         <Link to="/" className="hover:text-foreground">Catalogue</Link>
         {category && (
@@ -96,11 +88,10 @@ function ProductPage() {
         <span className="text-foreground font-medium truncate">{product.name}</span>
       </nav>
 
-      {/* Hero produit */}
       <div className="grid lg:grid-cols-5 gap-8 mb-12">
         <div className="lg:col-span-2 space-y-3">
           <div className="aspect-square rounded-2xl overflow-hidden bg-card border shadow-[var(--shadow-md)]">
-            <img src={activeImage} alt={product.name} className="h-full w-full object-cover" />
+            <img src={currentImage} alt={product.name} className="h-full w-full object-cover" />
           </div>
           {images.length > 1 && (
             <div className="grid grid-cols-5 gap-2">
@@ -109,7 +100,7 @@ function ProductPage() {
                   key={i}
                   type="button"
                   onClick={() => setActiveImage(src)}
-                  className={"aspect-square rounded-lg overflow-hidden border bg-muted " + (activeImage === src ? "ring-2 ring-accent" : "hover:border-accent")}
+                  className={"aspect-square rounded-lg overflow-hidden border bg-muted " + (currentImage === src ? "ring-2 ring-accent" : "hover:border-accent")}
                 >
                   <img src={src} alt="" className="h-full w-full object-cover" />
                 </button>
@@ -157,12 +148,11 @@ function ProductPage() {
 
           <p className="text-muted-foreground leading-relaxed mb-4">{product.description}</p>
 
-          {/* Mots-clés sous la description */}
           {product.keywords?.length > 0 && (
             <div className="mb-6">
               <div className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Mots-clés</div>
               <div className="flex flex-wrap gap-1.5">
-                {product.keywords.map((k: string) => (
+                {product.keywords.map((k) => (
                   <span key={k} className="text-xs px-2.5 py-1 rounded-md bg-muted text-muted-foreground border">#{k}</span>
                 ))}
               </div>
@@ -170,12 +160,11 @@ function ProductPage() {
           )}
 
           <div className="flex flex-wrap gap-2 mb-6">
-            {product.sectors.map((s: string) => (
+            {product.sectors.map((s) => (
               <span key={s} className="text-xs font-medium px-3 py-1.5 rounded-full bg-primary/10 text-primary">{s}</span>
             ))}
           </div>
 
-          {/* Ajouter au devis */}
           <div className="rounded-xl bg-card border p-5 mb-4">
             <div className="flex items-center gap-3">
               <div className="flex items-center bg-surface-muted rounded-lg">
@@ -215,14 +204,13 @@ function ProductPage() {
         </div>
       </div>
 
-      {/* Détails */}
       <div className="grid md:grid-cols-2 gap-6 mb-12">
         <div className="bg-card rounded-xl border p-6">
           <h2 className="font-display text-lg font-bold mb-4 flex items-center gap-2">
             <Check className="h-5 w-5 text-accent" /> Avantages
           </h2>
           <ul className="space-y-2.5">
-            {product.advantages.map((a: string) => (
+            {product.advantages.map((a) => (
               <li key={a} className="flex items-start gap-2.5 text-sm">
                 <Check className="h-4 w-4 text-success shrink-0 mt-0.5" />
                 <span>{a}</span>
@@ -235,7 +223,7 @@ function ProductPage() {
             <Package className="h-5 w-5 text-accent" /> Applications
           </h2>
           <ul className="space-y-2.5">
-            {product.applications.map((a: string) => (
+            {product.applications.map((a) => (
               <li key={a} className="flex items-start gap-2.5 text-sm">
                 <span className="h-1.5 w-1.5 rounded-full bg-accent mt-2 shrink-0" />
                 <span>{a}</span>
@@ -245,12 +233,11 @@ function ProductPage() {
         </div>
       </div>
 
-      {/* Produits similaires */}
       {similar.length > 0 && (
         <section>
           <h2 className="font-display text-xl font-bold mb-4">Produits similaires</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {similar.map((p: { id: string; name: string; reference: string; brand: string; image: string }) => (
+            {similar.map((p) => (
               <Link
                 key={p.id}
                 to="/produit/$productId"
