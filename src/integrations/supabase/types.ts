@@ -14,7 +14,184 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      categories: {
+        Row: {
+          created_at: string
+          description: string
+          icon: string
+          id: string
+          name: string
+          sort_order: number
+          subcategories: string[]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          icon?: string
+          id: string
+          name: string
+          sort_order?: number
+          subcategories?: string[]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          name?: string
+          sort_order?: number
+          subcategories?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      products: {
+        Row: {
+          advantages: string[]
+          applications: string[]
+          archived: boolean
+          brand: string
+          category_id: string | null
+          created_at: string
+          datasheet_url: string | null
+          description: string
+          gallery: string[]
+          id: string
+          image: string
+          name: string
+          reference: string
+          sectors: string[]
+          stock: number
+          subcategory: string | null
+          updated_at: string
+        }
+        Insert: {
+          advantages?: string[]
+          applications?: string[]
+          archived?: boolean
+          brand?: string
+          category_id?: string | null
+          created_at?: string
+          datasheet_url?: string | null
+          description?: string
+          gallery?: string[]
+          id: string
+          image?: string
+          name: string
+          reference: string
+          sectors?: string[]
+          stock?: number
+          subcategory?: string | null
+          updated_at?: string
+        }
+        Update: {
+          advantages?: string[]
+          applications?: string[]
+          archived?: boolean
+          brand?: string
+          category_id?: string | null
+          created_at?: string
+          datasheet_url?: string | null
+          description?: string
+          gallery?: string[]
+          id?: string
+          image?: string
+          name?: string
+          reference?: string
+          sectors?: string[]
+          stock?: number
+          subcategory?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quote_items: {
+        Row: {
+          created_at: string
+          id: string
+          product_id: string | null
+          product_name: string
+          quantity: number
+          quote_id: string
+          reference: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_id?: string | null
+          product_name: string
+          quantity?: number
+          quote_id: string
+          reference?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_id?: string | null
+          product_name?: string
+          quantity?: number
+          quote_id?: string
+          reference?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quote_items_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotes: {
+        Row: {
+          city: string | null
+          company: string
+          contact: string
+          created_at: string
+          email: string
+          id: string
+          notes: string | null
+          phone: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          city?: string | null
+          company: string
+          contact: string
+          created_at?: string
+          email: string
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          city?: string | null
+          company?: string
+          contact?: string
+          created_at?: string
+          email?: string
+          id?: string
+          notes?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
