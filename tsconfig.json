@@ -21,7 +21,9 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@tanstack/react-router": ["./src/compat/tanstack-router.tsx"],
+      "@tanstack/react-start": ["./src/compat/tanstack-start.ts"]
     }
   }
 }
