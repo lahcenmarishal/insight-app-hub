@@ -26,6 +26,16 @@
   </head>
   <body>
     <div id="root"></div>
+    <div id="app-splash" aria-hidden="true" style="position:fixed;inset:0;z-index:2147483600;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;background:#ffffff;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom);font-family:'Manrope',system-ui,sans-serif;">
+      <img src="/innova-logo.png" alt="Innova Lab Solutions" style="height:104px;width:auto;object-fit:contain;user-select:none;-webkit-user-drag:none;" />
+      <div style="height:4px;width:192px;overflow:hidden;border-radius:9999px;background:#e2e8f0;">
+        <div style="height:100%;width:33%;border-radius:9999px;background:#0a1f3d;animation:app-splash-progress 1.1s ease-in-out infinite;"></div>
+      </div>
+      <span style="font-size:12px;letter-spacing:.04em;color:#64748b;">Chargement…</span>
+    </div>
+    <style>
+      @keyframes app-splash-progress { 0% { transform: translateX(-100%);} 100% { transform: translateX(300%);} }
+    </style>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
