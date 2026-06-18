@@ -98,20 +98,20 @@ function QuotePage() {
 
   return (
     <PublicShell>
-      <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="font-display text-3xl font-bold mb-2">Demande de devis</h1>
-          <p className="text-muted-foreground">Vérifiez les produits, complétez vos coordonnées et envoyez votre demande.</p>
+      <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="font-display text-2xl md:text-3xl font-bold mb-1 md:mb-2">Demande de devis</h1>
+          <p className="text-sm md:text-base text-muted-foreground">Vérifiez les produits, complétez vos coordonnées et envoyez votre demande.</p>
         </div>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-5 py-3 text-base font-bold hover:brightness-110 transition shadow-[var(--shadow-md)]"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent text-accent-foreground px-4 py-2.5 md:px-5 md:py-3 text-sm md:text-base font-bold hover:brightness-110 transition shadow-[var(--shadow-md)] shrink-0 self-start"
         >
-          <ArrowLeft className="h-5 w-5" /> Continuer mes achats
+          <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" /> Continuer mes achats
         </Link>
       </div>
 
-      <div className="grid lg:grid-cols-5 gap-6">
+      <div className="grid lg:grid-cols-5 gap-4 md:gap-6">
         {/* Panier */}
         <div className="lg:col-span-3 space-y-4">
           <div className="bg-card rounded-xl border overflow-hidden">
@@ -139,9 +139,9 @@ function QuotePage() {
             ) : (
               <div className="divide-y">
                 {items.map((it) => (
-                  <div key={it.productId} className="p-4 flex items-center gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="font-semibold text-sm truncate">{it.productName}</div>
+                  <div key={it.productId} className="p-3 md:p-4 flex flex-wrap items-center gap-3 md:gap-4">
+                    <div className="flex-1 min-w-0 basis-full sm:basis-auto">
+                      <div className="font-semibold text-sm break-words">{it.productName}</div>
                       <div className="text-xs text-muted-foreground">
                         {it.reference}
                         {priceFor(it.productId) > 0 && <> · {priceFor(it.productId).toFixed(2)} € HT</>}
@@ -156,7 +156,7 @@ function QuotePage() {
                         <Plus className="h-3.5 w-3.5" />
                       </button>
                     </div>
-                    <div className="hidden sm:block w-20 text-right text-sm font-semibold">
+                    <div className="ml-auto sm:ml-0 sm:w-20 text-right text-sm font-semibold">
                       {priceFor(it.productId) > 0 ? `${(priceFor(it.productId) * it.quantity).toFixed(2)} €` : "—"}
                     </div>
                     <button onClick={() => remove(it.productId)} className="grid place-items-center h-9 w-9 text-muted-foreground hover:text-destructive" aria-label="Supprimer">
@@ -176,8 +176,8 @@ function QuotePage() {
         </div>
 
         {/* Formulaire client */}
-        <div className="lg:col-span-2 space-y-3 h-fit sticky top-20">
-          <form onSubmit={submit} className="bg-card rounded-xl border p-5 space-y-4">
+        <div className="lg:col-span-2 space-y-3 h-fit lg:sticky lg:top-20">
+          <form onSubmit={submit} className="bg-card rounded-xl border p-4 md:p-5 space-y-4">
             <div className="font-display font-bold mb-2">Vos coordonnées</div>
 
           <Field label="Société *" value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
