@@ -139,9 +139,9 @@ function QuotePage() {
             ) : (
               <div className="divide-y">
                 {items.map((it) => (
-                  <div key={it.productId} className="p-4 flex items-center gap-4">
-                    <div className="flex-1 min-w-0">
-                      <div className="font-semibold text-sm truncate">{it.productName}</div>
+                  <div key={it.productId} className="p-3 md:p-4 flex flex-wrap items-center gap-3 md:gap-4">
+                    <div className="flex-1 min-w-0 basis-full sm:basis-auto">
+                      <div className="font-semibold text-sm break-words">{it.productName}</div>
                       <div className="text-xs text-muted-foreground">
                         {it.reference}
                         {priceFor(it.productId) > 0 && <> · {priceFor(it.productId).toFixed(2)} € HT</>}
@@ -156,7 +156,7 @@ function QuotePage() {
                         <Plus className="h-3.5 w-3.5" />
                       </button>
                     </div>
-                    <div className="hidden sm:block w-20 text-right text-sm font-semibold">
+                    <div className="ml-auto sm:ml-0 sm:w-20 text-right text-sm font-semibold">
                       {priceFor(it.productId) > 0 ? `${(priceFor(it.productId) * it.quantity).toFixed(2)} €` : "—"}
                     </div>
                     <button onClick={() => remove(it.productId)} className="grid place-items-center h-9 w-9 text-muted-foreground hover:text-destructive" aria-label="Supprimer">
