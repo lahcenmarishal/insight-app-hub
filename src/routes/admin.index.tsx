@@ -1,132 +1,184 @@
 import { AdminGuard } from "@/components/admin-guard";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/app-shell";
-import { prospectsSeed } from "@/data/catalog";
-import { useCatalog } from "@/lib/catalog-data";
-import { Package, FolderTree, Users, FileText, Tag, Database, Boxes, ArrowRight, CheckCircle2, Circle, Cloud, Truck } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { Phone, MessageCircle, Mail, MapPin, FileText, Send, MapPinned, Clock, Save, Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({
     meta: [
-      { title: "Administration — Innova Lab Solutions" },
-      { name: "description", content: "Gestion du catalogue, des prospects et des devis." },
+      { title: "Paramètres du site — Innova Lab Solutions" },
+      { name: "description", content: "Gérer les coordonnées et informations de contact du site." },
     ],
   }),
-  component: () => (<AdminGuard><AdminPage /></AdminGuard>),
+  component: () => (<AdminGuard><AdminSettingsPage /></AdminGuard>),
 });
 
-function AdminPage() {
-  const { categories, products } = useCatalog();
-  const sections = [
-    { icon: Package, label: "Produits", value: products.length, hint: "Catalogue complet" },
-    { icon: FolderTree, label: "Catégories", value: categories.length, hint: "Familles produits" },
-    { icon: Tag, label: "Marques", value: new Set(products.map(p => p.brand)).size, hint: "Fournisseurs référencés" },
-    { icon: Users, label: "Prospects", value: prospectsSeed.length, hint: "Fiches CRM" },
-    { icon: FileText, label: "Devis", value: prospectsSeed.reduce((s, p) => s + (p.quoteCount ?? 0), 0), hint: "Demandes générées" },
-    { icon: Database, label: "Documents PDF", value: 0, hint: "Fiches techniques" },
-  ];
+type SiteSettings = {
+  id: string;
+  phone: string;
+  phone_display: string;
+  whatsapp: string;
+  email: string;
+  address: string;
+  quotes_email: string;
+  quotes_whatsapp: string;
+  google_maps_url: string;
+  business_hours: string;
+};
+
+function AdminSettingsPage() {
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [data, setData] = useState<SiteSettings | null>(null);
+
+  useEffect(() => {
+    supabase
+      .from("site_settings")
+      .select("*")
+      .limit(1)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (error) toast.error(error.message);
+        else setData(data as SiteSettings | null);
+        setLoading(false);
+      });
+  }, []);
+
+  function update<K extends keyof SiteSettings>(key: K, value: SiteSettings[K]) {
+    setData((d) => (d ? { ...d, [key]: value } : d));
+  }
+
+  async function save(e: React.FormEvent) {
+    e.preventDefault();
+    if (!data) return;
+    setSaving(true);
+    const { id, ...payload } = data;
+    const { error } = await supabase.from("site_settings").update(payload).eq("id", id);
+    setSaving(false);
+    if (error) toast.error(error.message);
+    else toast.success("Paramètres enregistrés");
+  }
+
+  if (loading) {
+    return (
+      <AppShell>
+        <div className="grid place-items-center py-20">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
+      </AppShell>
+    );
+  }
+
+  if (!data) {
+    return (
+      <AppShell>
+        <div className="text-center py-20 text-muted-foreground">Aucun paramètre trouvé.</div>
+      </AppShell>
+    );
+  }
 
   return (
     <AppShell>
       <div className="mb-8">
-        <h1 className="font-display text-3xl font-bold mb-2">Administration</h1>
-        <p className="text-muted-foreground">Gérez l'ensemble de votre écosystème commercial.</p>
-      </div>
-
-      <Link
-        to="/admin/produits"
-        className="group flex items-center gap-4 rounded-xl bg-card border p-5 mb-8 hover:border-accent hover:shadow-[var(--shadow-md)] transition-all"
-      >
-        <div className="grid place-items-center h-12 w-12 rounded-lg bg-[image:var(--gradient-accent)] text-primary-foreground">
-          <Boxes className="h-6 w-6" />
-        </div>
-        <div className="flex-1">
-          <div className="font-display font-bold">Gestion des produits</div>
-          <div className="text-sm text-muted-foreground">Créer, modifier et archiver les produits du catalogue.</div>
-        </div>
-        <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all" />
-      </Link>
-
-      <Link
-        to="/admin/fournisseurs"
-        className="group flex items-center gap-4 rounded-xl bg-card border p-5 mb-8 hover:border-accent hover:shadow-[var(--shadow-md)] transition-all"
-      >
-        <div className="grid place-items-center h-12 w-12 rounded-lg bg-[image:var(--gradient-accent)] text-primary-foreground">
-          <Truck className="h-6 w-6" />
-        </div>
-        <div className="flex-1">
-          <div className="font-display font-bold">Fournisseurs &amp; marges</div>
-          <div className="text-sm text-muted-foreground">Référencer les fournisseurs, saisir prix d'achat / vente et suivre les marges.</div>
-        </div>
-        <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-accent group-hover:translate-x-1 transition-all" />
-      </Link>
-
-      <div className="rounded-xl bg-[image:var(--gradient-primary)] text-primary-foreground p-6 mb-8 shadow-[var(--shadow-lg)]">
-        <div className="flex items-center gap-2 mb-1">
-          <Cloud className="h-5 w-5" />
-          <div className="font-display font-bold text-lg">Lovable Cloud actif — V2 en cours de déploiement</div>
-        </div>
-        <p className="text-sm text-primary-foreground/80">
-          Base PostgreSQL connectée, catalogue et devis persistés. V2 livrée : fournisseurs &amp; marges, devis chiffrés, PDF serveur, signature électronique, statistiques avancées et application installable (PWA). Restent optionnels : espace client B2B, envoi email automatique, notifications push et synchronisation hors ligne.
+        <h1 className="font-display text-2xl md:text-3xl font-bold mb-2">Paramètres du site</h1>
+        <p className="text-muted-foreground text-sm">
+          Coordonnées affichées sur le site public et utilisées pour l'envoi des devis.
         </p>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">
-        {sections.map((s) => (
-          <button key={s.label} className="text-left rounded-xl bg-card border p-5 hover:border-accent hover:shadow-[var(--shadow-md)] transition-all">
-            <div className="grid place-items-center h-11 w-11 rounded-lg bg-[image:var(--gradient-accent)] text-primary-foreground mb-4">
-              <s.icon className="h-5 w-5" />
-            </div>
-            <div className="font-display font-bold text-2xl mb-0.5">{s.value}</div>
-            <div className="font-semibold text-sm">{s.label}</div>
-            <div className="text-xs text-muted-foreground mt-0.5">{s.hint}</div>
-          </button>
-        ))}
-      </div>
+      <form onSubmit={save} className="space-y-6 max-w-3xl">
+        <Section title="Contact public" subtitle="Visible sur la page contact et le pied de page">
+          <Field icon={<Phone className="h-4 w-4" />} label="Téléphone (lien tel:)" placeholder="+212500000000"
+            value={data.phone} onChange={(v) => update("phone", v)} />
+          <Field icon={<Phone className="h-4 w-4" />} label="Téléphone (format affiché)" placeholder="+212 5 00 00 00 00"
+            value={data.phone_display} onChange={(v) => update("phone_display", v)} />
+          <Field icon={<MessageCircle className="h-4 w-4" />} label="WhatsApp (numéro international sans +)" placeholder="212600000000"
+            value={data.whatsapp} onChange={(v) => update("whatsapp", v)} />
+          <Field icon={<Mail className="h-4 w-4" />} label="E-mail de contact" placeholder="contact@innovalab.ma"
+            type="email" value={data.email} onChange={(v) => update("email", v)} />
+          <Field icon={<MapPin className="h-4 w-4" />} label="Adresse" placeholder="Agadir, Souss-Massa, Maroc"
+            value={data.address} onChange={(v) => update("address", v)} />
+        </Section>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        <RoadmapCard title="Feuille de route V2" items={[
-          { label: "Gestion des fournisseurs et tarifs d'achat", done: true },
-          { label: "Calcul automatique des marges", done: true },
-          { label: "Génération automatique de devis chiffrés", done: true },
-          { label: "Signature électronique des devis", done: true },
-          { label: "Statistiques commerciales avancées", done: true },
-          { label: "Espace client B2B avec commandes en ligne", done: false },
-        ]} />
-        <RoadmapCard title="Intégrations" items={[
-          { label: "Lovable Cloud (PostgreSQL + storage + auth)", done: true },
-          { label: "Génération PDF serveur (pdf-lib)", done: true },
-          { label: "Application installable (PWA)", done: true },
-          { label: "Envoi email automatique (Lovable Emails)", done: false },
-          { label: "Cache offline complet", done: false },
-          { label: "Notifications push tablette", done: false },
-          { label: "Synchronisation bidirectionnelle hors ligne", done: false },
-        ]} />
-      </div>
+        <Section title="Envoi des devis" subtitle="Destinataires des demandes de devis générées par le site">
+          <Field icon={<Send className="h-4 w-4" />} label="E-mail réception devis" placeholder="devis@innovalab.ma"
+            type="email" value={data.quotes_email} onChange={(v) => update("quotes_email", v)} />
+          <Field icon={<MessageCircle className="h-4 w-4" />} label="WhatsApp réception devis" placeholder="212600000000"
+            value={data.quotes_whatsapp} onChange={(v) => update("quotes_whatsapp", v)} />
+        </Section>
+
+        <Section title="Localisation" subtitle="Lien Google Maps utilisé pour l'itinéraire">
+          <Field icon={<MapPinned className="h-4 w-4" />} label="URL Google Maps" placeholder="https://maps.google.com/?q=..."
+            value={data.google_maps_url} onChange={(v) => update("google_maps_url", v)} />
+        </Section>
+
+        <Section title="Horaires de travail" subtitle="Une ligne par jour ou par plage horaire">
+          <div>
+            <label className="text-xs font-semibold mb-1 flex items-center gap-1.5">
+              <Clock className="h-4 w-4" /> Horaires
+            </label>
+            <textarea
+              rows={5}
+              value={data.business_hours}
+              onChange={(e) => update("business_hours", e.target.value)}
+              className="w-full rounded-lg border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent font-mono"
+              placeholder={"Lundi - Vendredi : 08h30 - 18h00\nSamedi : 09h00 - 13h00\nDimanche : Fermé"}
+            />
+          </div>
+        </Section>
+
+        <div className="sticky bottom-4 flex justify-end">
+          <button
+            type="submit"
+            disabled={saving}
+            className="inline-flex items-center gap-2 rounded-lg bg-[image:var(--gradient-accent)] text-primary-foreground px-5 py-2.5 text-sm font-semibold hover:opacity-90 disabled:opacity-50 shadow-[var(--shadow-md)]"
+          >
+            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+            {saving ? "Enregistrement…" : "Enregistrer"}
+          </button>
+        </div>
+      </form>
     </AppShell>
   );
 }
 
-function RoadmapCard({ title, items }: { title: string; items: { label: string; done: boolean }[] }) {
-  const done = items.filter((i) => i.done).length;
+function Section({ title, subtitle, children }: { title: string; subtitle?: string; children: React.ReactNode }) {
   return (
-    <div className="bg-card rounded-xl border p-6">
-      <div className="flex items-center justify-between mb-4">
+    <div className="rounded-xl border bg-card p-5 md:p-6">
+      <div className="mb-4">
         <h2 className="font-display font-bold">{title}</h2>
-        <span className="text-xs text-muted-foreground">{done}/{items.length}</span>
+        {subtitle && <p className="text-xs text-muted-foreground mt-0.5">{subtitle}</p>}
       </div>
-      <ul className="space-y-2 text-sm">
-        {items.map((i) => (
-          <li key={i.label} className="flex items-start gap-2">
-            {i.done ? (
-              <CheckCircle2 className="h-4 w-4 text-accent mt-0.5 shrink-0" />
-            ) : (
-              <Circle className="h-4 w-4 text-muted-foreground/40 mt-0.5 shrink-0" />
-            )}
-            <span className={i.done ? "text-foreground" : "text-muted-foreground"}>{i.label}</span>
-          </li>
-        ))}
-      </ul>
+      <div className="grid gap-4">{children}</div>
+    </div>
+  );
+}
+
+function Field({
+  icon, label, value, onChange, placeholder, type = "text",
+}: {
+  icon?: React.ReactNode;
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+  type?: string;
+}) {
+  return (
+    <div>
+      <label className="text-xs font-semibold mb-1 flex items-center gap-1.5">
+        {icon}{label}
+      </label>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="w-full rounded-lg border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+      />
     </div>
   );
 }

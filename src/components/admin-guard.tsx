@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Lock, LogOut, ShieldAlert, Loader2 } from "lucide-react";
@@ -91,6 +92,7 @@ export function AdminGuard({ children }: { children: ReactNode }) {
 }
 
 function LoginScreen() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -105,6 +107,7 @@ function LoginScreen() {
       return;
     }
     toast.success("Connecté");
+    navigate("/app");
   }
 
   return (
