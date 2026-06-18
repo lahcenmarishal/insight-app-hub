@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Boxes, Users, Settings, Search, Bell, Truck, FileText, BarChart3 } from "lucide-react";
+import { LayoutDashboard, Boxes, Users, Settings, Search, Bell, Truck, FileText, BarChart3, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 import type { ReactNode } from "react";
 
 const LOGO_URL = "/assets/innova-logo.png";
@@ -75,6 +76,15 @@ export function AppShell({ children }: { children: ReactNode }) {
               aria-label="Notifications"
             >
               <Bell className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => supabase.auth.signOut()}
+              className="grid place-items-center h-9 w-9 rounded-lg bg-surface-muted text-muted-foreground hover:text-destructive"
+              aria-label="Déconnexion"
+              title="Déconnexion"
+            >
+              <LogOut className="h-4 w-4" />
             </button>
           </div>
         </header>
