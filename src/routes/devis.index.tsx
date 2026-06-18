@@ -98,20 +98,20 @@ function QuotePage() {
 
   return (
     <PublicShell>
-      <div className="mb-8 flex items-start justify-between gap-4 flex-wrap">
-        <div>
-          <h1 className="font-display text-3xl font-bold mb-2">Demande de devis</h1>
-          <p className="text-muted-foreground">Vérifiez les produits, complétez vos coordonnées et envoyez votre demande.</p>
+      <div className="mb-6 md:mb-8 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div className="min-w-0">
+          <h1 className="font-display text-2xl md:text-3xl font-bold mb-1 md:mb-2">Demande de devis</h1>
+          <p className="text-sm md:text-base text-muted-foreground">Vérifiez les produits, complétez vos coordonnées et envoyez votre demande.</p>
         </div>
         <Link
           to="/"
-          className="inline-flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-5 py-3 text-base font-bold hover:brightness-110 transition shadow-[var(--shadow-md)]"
+          className="inline-flex items-center justify-center gap-2 rounded-lg bg-accent text-accent-foreground px-4 py-2.5 md:px-5 md:py-3 text-sm md:text-base font-bold hover:brightness-110 transition shadow-[var(--shadow-md)] shrink-0 self-start"
         >
-          <ArrowLeft className="h-5 w-5" /> Continuer mes achats
+          <ArrowLeft className="h-4 w-4 md:h-5 md:w-5" /> Continuer mes achats
         </Link>
       </div>
 
-      <div className="grid lg:grid-cols-5 gap-6">
+      <div className="grid lg:grid-cols-5 gap-4 md:gap-6">
         {/* Panier */}
         <div className="lg:col-span-3 space-y-4">
           <div className="bg-card rounded-xl border overflow-hidden">
