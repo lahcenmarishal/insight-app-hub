@@ -176,8 +176,8 @@ function QuotePage() {
         </div>
 
         {/* Formulaire client */}
-        <div className="lg:col-span-2 space-y-3 h-fit sticky top-20">
-          <form onSubmit={submit} className="bg-card rounded-xl border p-5 space-y-4">
+        <div className="lg:col-span-2 space-y-3 h-fit lg:sticky lg:top-20">
+          <form onSubmit={submit} className="bg-card rounded-xl border p-4 md:p-5 space-y-4">
             <div className="font-display font-bold mb-2">Vos coordonnées</div>
 
           <Field label="Société *" value={form.company} onChange={(v) => setForm({ ...form, company: v })} />
