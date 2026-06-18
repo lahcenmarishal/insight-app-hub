@@ -280,6 +280,54 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          address: string
+          business_hours: string
+          created_at: string
+          email: string
+          google_maps_url: string
+          id: string
+          phone: string
+          phone_display: string
+          quotes_email: string
+          quotes_whatsapp: string
+          singleton: boolean
+          updated_at: string
+          whatsapp: string
+        }
+        Insert: {
+          address?: string
+          business_hours?: string
+          created_at?: string
+          email?: string
+          google_maps_url?: string
+          id?: string
+          phone?: string
+          phone_display?: string
+          quotes_email?: string
+          quotes_whatsapp?: string
+          singleton?: boolean
+          updated_at?: string
+          whatsapp?: string
+        }
+        Update: {
+          address?: string
+          business_hours?: string
+          created_at?: string
+          email?: string
+          google_maps_url?: string
+          id?: string
+          phone?: string
+          phone_display?: string
+          quotes_email?: string
+          quotes_whatsapp?: string
+          singleton?: boolean
+          updated_at?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
       suppliers: {
         Row: {
           contact: string | null
