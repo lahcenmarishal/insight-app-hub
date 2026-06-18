@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Boxes, Users, Settings, Search, Bell, Truck, FileText, BarChart3 } from "lucide-react";
+import { LayoutDashboard, Boxes, Users, Settings, Search, Bell, Truck, FileText, BarChart3, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 import type { ReactNode } from "react";
 
 const LOGO_URL = "/assets/innova-logo.png";
