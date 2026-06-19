@@ -148,6 +148,14 @@ function LoginScreen() {
         >
           {loading ? "Connexion…" : "Se connecter"}
         </button>
+        <button
+          type="button"
+          onClick={() => navigate("/")}
+          className="w-full mt-3 inline-flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Retour à l'application
+        </button>
       </form>
     </div>
   );
