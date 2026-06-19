@@ -27,7 +27,7 @@ function AdminDashboard() {
   const stats = [
     { icon: Package, label: "Produits", value: products.length, hint: "Catalogue actif", to: "/admin/produits" },
     { icon: FolderTree, label: "Catégories", value: categories.length, hint: "Familles produits", to: "/catalogue" },
-    { icon: Tag, label: "Marques", value: brandsCount, hint: "Fournisseurs", to: "/admin" },
+    { icon: Tag, label: "Marques", value: brandsCount, hint: "Fournisseurs", to: "/admin/fournisseurs" },
     { icon: Users, label: "Prospects", value: prospectsSeed.length, hint: "Fiches CRM", to: "/prospects" },
     { icon: FileText, label: "Devis", value: totalDevis, hint: "Demandes générées", to: "/prospects" },
   ];
@@ -36,7 +36,7 @@ function AdminDashboard() {
     { icon: Package, label: "Gérer les produits", hint: "Créer, modifier, archiver", to: "/admin/produits" },
     { icon: FolderTree, label: "Catalogue", hint: "Parcourir par catégorie", to: "/catalogue" },
     { icon: Users, label: "Prospects & clients", hint: "CRM commercial", to: "/prospects" },
-    { icon: Settings, label: "Administration", hint: "Paramètres système", to: "/admin" },
+    { icon: Settings, label: "Paramètres", hint: "Coordonnées du site", to: "/parametres" },
   ];
 
   return (
