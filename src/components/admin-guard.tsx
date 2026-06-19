@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Lock, LogOut, ShieldAlert, Loader2 } from "lucide-react";
+import { Lock, LogOut, ShieldAlert, Loader2, ArrowLeft } from "lucide-react";
 
 type State =
   | { status: "loading" }
