@@ -18,6 +18,12 @@ const nav = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    navigate({ to: "/admin" });
+  }
 
 
   return (
