@@ -85,7 +85,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </button>
             <button
               type="button"
-              onClick={() => supabase.auth.signOut()}
+              onClick={handleLogout}
               className="grid place-items-center h-9 w-9 rounded-lg bg-surface-muted text-muted-foreground hover:text-destructive"
               aria-label="Déconnexion"
               title="Déconnexion"
