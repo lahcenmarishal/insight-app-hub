@@ -36,7 +36,7 @@ function AdminDashboard() {
     { icon: Package, label: "Gérer les produits", hint: "Créer, modifier, archiver", to: "/admin/produits" },
     { icon: FolderTree, label: "Catalogue", hint: "Parcourir par catégorie", to: "/catalogue" },
     { icon: Users, label: "Prospects & clients", hint: "CRM commercial", to: "/prospects" },
-    { icon: Settings, label: "Administration", hint: "Paramètres système", to: "/admin" },
+    { icon: Settings, label: "Paramètres", hint: "Coordonnées du site", to: "/parametres" },
   ];
 
   return (
