@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Phone, MessageCircle, Mail, MapPin, FileText, Send, MapPinned, Clock, Save, Loader2 } from "lucide-react";
 
-export const Route = createFileRoute("/admin/")({
+export const Route = createFileRoute("/parametres/")({
   head: () => ({
     meta: [
       { title: "Paramètres du site — Innova Lab Solutions" },
