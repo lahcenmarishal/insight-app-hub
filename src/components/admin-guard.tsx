@@ -2,7 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Lock, LogOut, ShieldAlert, Loader2 } from "lucide-react";
+import { Lock, LogOut, ShieldAlert, Loader2, ArrowLeft } from "lucide-react";
 
 type State =
   | { status: "loading" }
@@ -147,6 +147,14 @@ function LoginScreen() {
           className="w-full rounded-lg bg-[image:var(--gradient-accent)] text-primary-foreground py-2.5 text-sm font-semibold hover:opacity-90 disabled:opacity-50"
         >
           {loading ? "Connexion…" : "Se connecter"}
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate("/")}
+          className="w-full mt-3 inline-flex items-center justify-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Retour à l'application
         </button>
       </form>
     </div>

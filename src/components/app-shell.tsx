@@ -1,5 +1,5 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
-import { LayoutDashboard, Boxes, Users, Settings, Search, Bell, Truck, FileText, BarChart3, LogOut } from "lucide-react";
+import { LayoutDashboard, Boxes, Users, Settings, Search, Bell, Truck, FileText, BarChart3, LogOut, ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import type { ReactNode } from "react";
@@ -92,6 +92,14 @@ export function AppShell({ children }: { children: ReactNode }) {
             >
               <LogOut className="h-4 w-4" />
             </button>
+            <Link
+              to="/"
+              className="grid place-items-center h-9 w-9 rounded-lg bg-surface-muted text-muted-foreground hover:text-foreground"
+              aria-label="Retour à l'application"
+              title="Retour à l'application"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </Link>
           </div>
         </header>
 
