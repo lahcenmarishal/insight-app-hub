@@ -13,7 +13,7 @@ const nav = [
   { to: "/prospects", label: "Prospects", icon: Users },
   { to: "/admin/devis", label: "Devis", icon: FileText },
   { to: "/admin/stats", label: "Statistiques", icon: BarChart3 },
-  { to: "/admin", label: "Administration", icon: Settings },
+  { to: "/parametres", label: "Paramètres", icon: Settings },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
