@@ -27,7 +27,7 @@ function AdminDashboard() {
   const stats = [
     { icon: Package, label: "Produits", value: products.length, hint: "Catalogue actif", to: "/admin/produits" },
     { icon: FolderTree, label: "Catégories", value: categories.length, hint: "Familles produits", to: "/catalogue" },
-    { icon: Tag, label: "Marques", value: brandsCount, hint: "Fournisseurs", to: "/admin" },
+    { icon: Tag, label: "Marques", value: brandsCount, hint: "Fournisseurs", to: "/admin/fournisseurs" },
     { icon: Users, label: "Prospects", value: prospectsSeed.length, hint: "Fiches CRM", to: "/prospects" },
     { icon: FileText, label: "Devis", value: totalDevis, hint: "Demandes générées", to: "/prospects" },
   ];
