@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import { LayoutDashboard, Boxes, Users, Settings, Search, Bell, Truck, FileText, BarChart3, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,6 +18,12 @@ const nav = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    navigate({ to: "/admin" });
+  }
 
 
   return (
@@ -79,7 +85,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </button>
             <button
               type="button"
-              onClick={() => supabase.auth.signOut()}
+              onClick={handleLogout}
               className="grid place-items-center h-9 w-9 rounded-lg bg-surface-muted text-muted-foreground hover:text-destructive"
               aria-label="Déconnexion"
               title="Déconnexion"

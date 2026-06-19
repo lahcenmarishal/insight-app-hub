@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppShell } from "@/components/app-shell";
+import { AdminGuard } from "@/components/admin-guard";
 import { prospectsSeed } from "@/data/catalog";
 import { useCatalog } from "@/lib/catalog-data";
 import {
@@ -14,7 +15,7 @@ export const Route = createFileRoute("/app/")({
       { name: "description", content: "Espace d'administration : gestion du catalogue, prospects et demandes de devis." },
     ],
   }),
-  component: AdminDashboard,
+  component: () => (<AdminGuard><AdminDashboard /></AdminGuard>),
 });
 
 const today = new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(new Date());
