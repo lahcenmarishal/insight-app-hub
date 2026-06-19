@@ -8,7 +8,7 @@ import "@/routes/contact";
 import "@/routes/devis.index";
 import "@/routes/app.index";
 import "@/routes/prospects.index";
-import "@/routes/admin.index";
+import "@/routes/parametres.index";
 import "@/routes/admin.devis";
 import "@/routes/admin.fournisseurs";
 import "@/routes/admin.produits";
