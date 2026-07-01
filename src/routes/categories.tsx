@@ -43,15 +43,6 @@ const CATEGORY_BG: Record<string, string> = {
   epi: "/assets/instruments.jpg",
 };
 
-const CATEGORY_BG: Record<string, string> = {
-  consommables: "/assets/consommables.jpg",
-  reactifs: "/assets/reactifs.jpg",
-  instruments: "/assets/instruments.jpg",
-  equipements: "/assets/equipements.jpg",
-  agro: "/assets/agro.jpg",
-  qualite: "/assets/qualite.jpg",
-  sante: "/assets/sante.jpg",
-};
 
 function CategoriesPage() {
   const { categories } = useProducts();
