@@ -33,6 +33,14 @@ const ICONS: Record<string, LucideIcon> = {
   Wheat,
   ShieldCheck,
   Stethoscope,
+  HardHat,
+};
+
+const CATEGORY_BG: Record<string, string> = {
+  "consommables-soins": "/assets/sante.jpg",
+  "consommables-prelevement": "/assets/consommables.jpg",
+  "hygiene-desinfection": "/assets/qualite.jpg",
+  epi: "/assets/instruments.jpg",
 };
 
 const CATEGORY_BG: Record<string, string> = {
