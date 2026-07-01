@@ -7,6 +7,7 @@ import {
   Wheat,
   ShieldCheck,
   Stethoscope,
+  HardHat,
   type LucideIcon,
 } from "lucide-react";
 import { PublicShell } from "@/components/public-shell";
@@ -32,17 +33,16 @@ const ICONS: Record<string, LucideIcon> = {
   Wheat,
   ShieldCheck,
   Stethoscope,
+  HardHat,
 };
 
 const CATEGORY_BG: Record<string, string> = {
-  consommables: "/assets/consommables.jpg",
-  reactifs: "/assets/reactifs.jpg",
-  instruments: "/assets/instruments.jpg",
-  equipements: "/assets/equipements.jpg",
-  agro: "/assets/agro.jpg",
-  qualite: "/assets/qualite.jpg",
-  sante: "/assets/sante.jpg",
+  "consommables-soins": "/assets/sante.jpg",
+  "consommables-prelevement": "/assets/consommables.jpg",
+  "hygiene-desinfection": "/assets/qualite.jpg",
+  epi: "/assets/instruments.jpg",
 };
+
 
 function CategoriesPage() {
   const { categories } = useProducts();
