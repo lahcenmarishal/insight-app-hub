@@ -7,6 +7,7 @@ import {
   Wheat,
   ShieldCheck,
   Stethoscope,
+  HardHat,
   type LucideIcon,
 } from "lucide-react";
 import { PublicShell } from "@/components/public-shell";
