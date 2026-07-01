@@ -37,10 +37,10 @@ const ICONS: Record<string, LucideIcon> = {
 };
 
 const CATEGORY_BG: Record<string, string> = {
-  "consommables-soins": "/assets/sante.jpg",
-  "consommables-prelevement": "/assets/consommables.jpg",
-  "hygiene-desinfection": "/assets/qualite.jpg",
-  epi: "/assets/instruments.jpg",
+  "consommables-soins": "/assets/cat-soins.jpg",
+  "consommables-prelevement": "/assets/cat-prelevement.jpg",
+  "hygiene-desinfection": "/assets/cat-hygiene.jpg",
+  epi: "/assets/cat-epi.jpg",
 };
 
 
